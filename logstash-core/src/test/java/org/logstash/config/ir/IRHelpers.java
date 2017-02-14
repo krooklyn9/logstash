@@ -20,7 +20,7 @@ import static org.logstash.config.ir.PluginDefinition.Type.*;
  * Created by andrewvc on 9/19/16.
  */
 public class IRHelpers {
-    public static void assertSyntaxEquals(ISourceComponent left, ISourceComponent right) {
+    public static void assertSyntaxEquals(SourceComponent left, SourceComponent right) {
         String message = String.format("Expected '%s' to equal '%s'", left, right);
         MatcherAssert.assertThat(message, left.sourceComponentEquals(right));
     }
@@ -65,7 +65,7 @@ public class IRHelpers {
         }
 
         @Override
-        public boolean sourceComponentEquals(ISourceComponent other) {
+        public boolean sourceComponentEquals(SourceComponent other) {
             if (other == null) return false;
             if (other instanceof TestVertex) {
                 return Objects.equals(getId(), ((TestVertex) other).getId());

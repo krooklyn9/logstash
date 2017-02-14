@@ -1,11 +1,8 @@
 package org.logstash.config.ir.imperative;
 
 import org.junit.Test;
-import org.logstash.config.ir.SourceComponent;
+import org.logstash.config.ir.BaseSourceComponent;
 import org.logstash.config.ir.InvalidIRException;
-import org.logstash.config.ir.SourceMetadata;
-
-import java.util.ArrayList;
 
 import static org.logstash.config.ir.DSL.*;
 import static org.logstash.config.ir.IRHelpers.assertSyntaxEquals;
@@ -42,11 +39,11 @@ public class DSLTest {
 }
 
 
-    public SourceComponent composedPlugins() throws InvalidIRException {
+    public BaseSourceComponent composedPlugins() throws InvalidIRException {
         return iComposeSequence(iPlugin(FILTER, "json"), iPlugin(FILTER, "stuff"));
     }
 
-    public SourceComponent complexExpression() throws InvalidIRException {
+    public BaseSourceComponent complexExpression() throws InvalidIRException {
         return iComposeSequence(
                 iPlugin(FILTER, "grok"),
                 iPlugin(FILTER, "kv"),

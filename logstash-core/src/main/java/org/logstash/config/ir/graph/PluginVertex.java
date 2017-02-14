@@ -3,7 +3,7 @@ package org.logstash.config.ir.graph;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.logstash.common.Util;
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.PluginDefinition;
 import org.logstash.config.ir.SourceMetadata;
 
@@ -71,7 +71,7 @@ public class PluginVertex extends Vertex {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent other) {
+    public boolean sourceComponentEquals(SourceComponent other) {
         if (other == null) return false;
         if (other == this) return true;
         if (other instanceof PluginVertex) {

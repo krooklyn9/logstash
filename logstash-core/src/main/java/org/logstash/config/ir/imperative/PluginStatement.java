@@ -1,6 +1,6 @@
 package org.logstash.config.ir.imperative;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.PluginDefinition;
 import org.logstash.config.ir.SourceMetadata;
@@ -20,7 +20,7 @@ public class PluginStatement extends Statement {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         if (sourceComponent == null) return false;
         if (sourceComponent == this) return true;
         if (sourceComponent instanceof PluginStatement) {

@@ -1,6 +1,6 @@
 package org.logstash.config.ir.graph;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.SourceMetadata;
 
 /**
@@ -58,7 +58,7 @@ public class SpecialVertex extends Vertex {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent other) {
+    public boolean sourceComponentEquals(SourceComponent other) {
         if (other == null) return false;
         if (other == this) return true;
         if (other instanceof SpecialVertex) {

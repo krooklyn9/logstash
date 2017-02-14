@@ -1,8 +1,8 @@
 package org.logstash.config.ir.graph;
 
 import org.logstash.common.Util;
-import org.logstash.config.ir.IHashable;
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.Hashable;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 import org.logstash.config.ir.graph.algorithms.BreadthFirst;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 /**
  * Created by andrewvc on 9/15/16.
  */
-public class Graph implements ISourceComponent, IHashable {
+public class Graph implements SourceComponent, Hashable {
     public final Set<Vertex> vertices = new HashSet<>();
     private final Set<Edge> edges = new HashSet<>();
     private Map<Vertex, Integer> vertexRanks = new HashMap<>();
@@ -387,7 +387,7 @@ public class Graph implements ISourceComponent, IHashable {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         if (sourceComponent == this) return true;
         if (sourceComponent instanceof Graph) {
             Graph otherGraph = (Graph) sourceComponent;

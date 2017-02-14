@@ -1,6 +1,6 @@
 package org.logstash.config.ir.expression;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 
@@ -40,7 +40,7 @@ public class ValueExpression extends Expression {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         if (sourceComponent == null) return false;
         if (this == sourceComponent) return true;
         if (sourceComponent instanceof ValueExpression) {

@@ -3,8 +3,8 @@ package org.logstash.config.ir.expression;
 import org.jruby.RubyInstanceConfig;
 import org.jruby.embed.AttributeName;
 import org.jruby.embed.ScriptingContainer;
-import org.logstash.config.ir.IHashable;
-import org.logstash.config.ir.SourceComponent;
+import org.logstash.config.ir.Hashable;
+import org.logstash.config.ir.BaseSourceComponent;
 import org.logstash.config.ir.SourceMetadata;
 
 /*
@@ -15,7 +15,7 @@ import org.logstash.config.ir.SourceMetadata;
  * notnull(eEventValue("foo"))
  * Created by andrewvc on 9/6/16.
  */
-public abstract class Expression extends SourceComponent implements IHashable {
+public abstract class Expression extends BaseSourceComponent implements Hashable {
     private Object compiled;
     private ScriptingContainer container;
 

@@ -1,13 +1,12 @@
 package org.logstash.config.ir.graph;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.SourceMetadata;
 import org.logstash.config.ir.expression.BooleanExpression;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +29,7 @@ public class IfVertex extends Vertex {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent other) {
+    public boolean sourceComponentEquals(SourceComponent other) {
         if (other == null) return false;
         if (other == this) return true;
         if (other instanceof IfVertex) {

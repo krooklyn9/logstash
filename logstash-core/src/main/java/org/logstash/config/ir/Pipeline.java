@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * Created by andrewvc on 9/20/16.
  */
-public class Pipeline implements IHashable {
+public class Pipeline implements Hashable {
     public Graph getGraph() {
         return graph;
     }

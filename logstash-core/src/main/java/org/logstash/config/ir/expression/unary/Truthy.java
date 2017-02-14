@@ -1,6 +1,6 @@
 package org.logstash.config.ir.expression.unary;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 import org.logstash.config.ir.expression.Expression;
@@ -20,7 +20,7 @@ public class Truthy extends UnaryBooleanExpression {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         return sourceComponent != null &&
                 sourceComponent instanceof Truthy &&
                 ((Truthy) sourceComponent).getExpression().sourceComponentEquals(this.getExpression());

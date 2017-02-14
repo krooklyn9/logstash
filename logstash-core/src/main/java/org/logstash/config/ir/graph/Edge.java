@@ -1,6 +1,6 @@
 package org.logstash.config.ir.graph;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 
@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 /**
  * Created by andrewvc on 9/15/16.
  */
-public abstract class Edge implements ISourceComponent {
+public abstract class Edge implements SourceComponent {
     private Graph graph;
 
     public void setGraph(Graph graph) {
@@ -75,7 +75,7 @@ public abstract class Edge implements ISourceComponent {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         if (sourceComponent == null) return false;
         if (sourceComponent == this) return true;
         if (sourceComponent.getClass() == this.getClass()) {

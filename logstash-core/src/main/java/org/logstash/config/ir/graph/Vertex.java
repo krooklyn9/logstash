@@ -1,8 +1,8 @@
 package org.logstash.config.ir.graph;
 
 import org.logstash.common.Util;
-import org.logstash.config.ir.IHashable;
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.Hashable;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 import org.logstash.config.ir.graph.algorithms.DepthFirst;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 /**
  * Created by andrewvc on 9/15/16.
  */
-public abstract class Vertex implements ISourceComponent, IHashable {
+public abstract class Vertex implements SourceComponent, Hashable {
     private final SourceMetadata sourceMetadata;
     private Graph graph = this.getGraph();
 

@@ -1,7 +1,7 @@
 package org.logstash.config.ir.graph;
 
 import org.logstash.common.Util;
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 
 /**
@@ -64,7 +64,7 @@ public class BooleanEdge extends Edge {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         if (sourceComponent == null) return false;
         if (sourceComponent == this) return true;
         if (sourceComponent instanceof BooleanEdge) {

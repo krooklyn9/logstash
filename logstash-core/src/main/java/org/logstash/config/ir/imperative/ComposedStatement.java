@@ -1,6 +1,6 @@
 package org.logstash.config.ir.imperative;
 
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 
@@ -34,7 +34,7 @@ public abstract class ComposedStatement extends Statement {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent sourceComponent) {
+    public boolean sourceComponentEquals(SourceComponent sourceComponent) {
         if (sourceComponent == null) return false;
         if (this == sourceComponent) return true;
         if (sourceComponent.getClass().equals(this.getClass())) {

@@ -2,7 +2,7 @@ package org.logstash.config.ir.expression;
 
 import org.joni.Option;
 import org.joni.Regex;
-import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceComponent;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.SourceMetadata;
 
@@ -38,7 +38,7 @@ public class RegexValueExpression extends ValueExpression {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent other) {
+    public boolean sourceComponentEquals(SourceComponent other) {
         if (other == null) return false;
         if (other instanceof RegexValueExpression) {
             return (((RegexValueExpression) other).getSource().equals(getSource()));

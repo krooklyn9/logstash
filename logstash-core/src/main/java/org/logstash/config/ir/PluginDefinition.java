@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Created by andrewvc on 9/20/16.
  */
-public class PluginDefinition implements ISourceComponent, IHashable {
+public class PluginDefinition implements SourceComponent, Hashable {
     private static ObjectMapper om = new ObjectMapper();
 
     @Override
@@ -75,7 +75,7 @@ public class PluginDefinition implements ISourceComponent, IHashable {
     }
 
     @Override
-    public boolean sourceComponentEquals(ISourceComponent o) {
+    public boolean sourceComponentEquals(SourceComponent o) {
         if (o == null) return false;
         if (o instanceof PluginDefinition) {
             PluginDefinition oPluginDefinition = (PluginDefinition) o;
