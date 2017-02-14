@@ -19,6 +19,4 @@ public abstract class SourceComponent implements ISourceComponent {
     public String toString(int indent) {
         return "toString(int indent) should be implemented for " + this.getClass().getName();
     }
-
-
 }

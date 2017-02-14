@@ -72,6 +72,11 @@ public class IRHelpers {
             }
             return false;
         }
+
+        @Override
+        public SourceMetadata getMeta() {
+            return null;
+        }
     }
 
     public static Edge testEdge() throws InvalidIRException {

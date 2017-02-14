@@ -1,6 +1,7 @@
 package org.logstash.config.ir.graph;
 
 import org.logstash.config.ir.ISourceComponent;
+import org.logstash.config.ir.SourceMetadata;
 
 /**
  * Created by andrewvc on 9/15/16.
@@ -65,5 +66,11 @@ public class SpecialVertex extends Vertex {
             return otherV.type.equals(this.type);
         }
         return false;
+    }
+
+    // Special vertices really have no metadata
+    @Override
+    public SourceMetadata getMeta() {
+        return null;
     }
 }

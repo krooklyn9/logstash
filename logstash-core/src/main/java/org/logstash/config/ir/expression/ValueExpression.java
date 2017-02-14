@@ -27,6 +27,8 @@ public class ValueExpression extends Expression {
                 value instanceof List ||
                 value instanceof java.time.Instant
         )) {
+            // This *should* be caught by the treetop grammar, but we need this case just in case there's a bug
+            // somewhere
             throw new InvalidIRException("Invalid eValue " + value + " with class " + value.getClass().getName());
         }
 

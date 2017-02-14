@@ -174,11 +174,6 @@ public abstract class Vertex implements ISourceComponent, IHashable {
 
     public abstract String individualHashSource();
 
-    @Override
-    public SourceMetadata getMeta() {
-        return null;
-    }
-
     // Can be overriden in subclasses to define multiple
     // expected Edge classes this Vertex can take.
     // If any EdgeFactory instances are returned this Vertex is considered

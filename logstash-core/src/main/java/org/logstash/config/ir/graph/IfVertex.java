@@ -42,6 +42,12 @@ public class IfVertex extends Vertex {
         return false;
     }
 
+    // An IfVertex has no real metadata in and of itself, but its expression does!
+    @Override
+    public SourceMetadata getMeta() {
+        return null;
+    }
+
     public boolean hasEdgeType(boolean type) {
         for (Edge e : getOutgoingEdges()) {
             BooleanEdge bEdge = (BooleanEdge) e; // There should only  be boolean edges here!
