@@ -17,7 +17,7 @@ import static org.logstash.config.ir.IRHelpers.testVertex;
  */
 public class ShortestPathTest {
     @Test
-    public void testShortestPathBasic() throws InvalidIRException {
+    public void testShortestPathBasic() throws InvalidIRException, ShortestPath.InvalidShortestPathArguments {
         Graph g = Graph.empty();
         Vertex v1 = testVertex("v1");
         g.addVertex(v1);

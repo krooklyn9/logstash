@@ -22,6 +22,6 @@ public abstract class Statement extends BaseSourceComponent {
     public abstract String toString(int indent);
 
     public String indentPadding(int length) {
-        return new String(new char[length]).replace("\0", " ");
+        return String.format("%" + length + "s", "");
     }
 }

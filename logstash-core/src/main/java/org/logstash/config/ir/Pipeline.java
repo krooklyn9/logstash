@@ -2,7 +2,7 @@ package org.logstash.config.ir;
 
 import org.logstash.config.ir.graph.Graph;
 import org.logstash.config.ir.graph.PluginVertex;
-import org.logstash.config.ir.graph.SpecialVertex;
+import org.logstash.config.ir.graph.QueueVertex;
 import org.logstash.config.ir.graph.Vertex;
 
 import java.util.List;
@@ -17,17 +17,17 @@ public class Pipeline implements Hashable {
         return graph;
     }
 
-    public SpecialVertex getQueue() {
+    public QueueVertex getQueue() {
         return queue;
     }
 
-    public SpecialVertex getFilterOut() {
-        return filterOut;
-    }
+    //public QueueVertex getFilterOut() {
+    //    return filterOut;
+    //}
 
     private final Graph graph;
-    private final SpecialVertex queue;
-    private final SpecialVertex filterOut;
+    private final QueueVertex queue;
+    //private final QueueVertex filterOut;
 
     public Pipeline(Graph inputSection, Graph filterSection, Graph outputSection) throws InvalidIRException {
         // Validate all incoming graphs, we can't turn an invalid graph into a Pipeline!
@@ -38,17 +38,11 @@ public class Pipeline implements Hashable {
         Graph tempGraph = inputSection.copy(); // The input section are our roots, so we can import that wholesale
 
         // Connect all the input vertices out to the queue
-        queue = new SpecialVertex(SpecialVertex.Type.QUEUE);
+        queue = new QueueVertex();
         tempGraph = tempGraph.chain(queue);
 
         // Now we connect the queue to the root of the filter section
         tempGraph = tempGraph.chain(filterSection);
-
-        // Now we connect the leaves (and partial leaves) of the graph
-        // which should all be filters (unless no filters are defined)
-        // to the special filterOut node
-        filterOut = new SpecialVertex(SpecialVertex.Type.FILTER_OUT);
-        tempGraph = tempGraph.chain(filterOut);
 
         // Finally, connect the filter out node to all the outputs
         this.graph = tempGraph.chain(outputSection);

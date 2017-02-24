@@ -2,7 +2,9 @@ package org.logstash.config.ir.graph.algorithms;
 
 import org.logstash.config.ir.graph.Vertex;
 
+import java.security.cert.CollectionCertStoreParameters;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -11,23 +13,40 @@ import java.util.stream.Stream;
  * useful shortly, so we should hold onto it for a while.
  */
 public class ShortestPath {
-    public static List<Vertex> shortestPath(Vertex from, Vertex to) {
+    static class InvalidShortestPathArguments extends Exception {
+        private final Collection<Vertex> invalidVertices;
+
+        public InvalidShortestPathArguments(Collection<Vertex> invalidVertices) {
+            super();
+            this.invalidVertices = invalidVertices;
+
+        }
+
+        @Override
+        public String getMessage() {
+            String verticesMessage = invalidVertices.stream().map(Vertex::toString).collect(Collectors.joining(", "));
+            return "Attempted to determine path for vertex that is not in the search space!" + verticesMessage;
+        }
+    }
+
+
+    public static List<Vertex> shortestPath(Vertex from, Vertex to) throws InvalidShortestPathArguments {
         return shortestPath(from, Collections.singleton(to)).get(to);
     }
 
-    public static Map<Vertex, List<Vertex>> shortestPath(Vertex from, Collection<Vertex> to) {
+    public static Map<Vertex, List<Vertex>> shortestPath(Vertex from, Collection<Vertex> to) throws InvalidShortestPathArguments {
         return shortestPath(from, to, false);
     }
 
     // Finds the shortest paths to the specified vertices traversing edges backward using Dijkstra's algorithm.
     // The items in `to` must be ancestors of this Vertex!
-    public static Map<Vertex, List<Vertex>> shortestReversePath(Vertex from, Collection<Vertex> to) {
+    public static Map<Vertex, List<Vertex>> shortestReversePath(Vertex from, Collection<Vertex> to) throws InvalidShortestPathArguments {
         return shortestPath(from, to, true);
     }
 
     // Finds the shortest paths to the specified vertices using Dijkstra's algorithm.
     // The items in `to` must be ancestors of this Vertex!
-    public static Map<Vertex, List<Vertex>> shortestPath(Vertex from, Collection<Vertex> to, boolean reverseSearch) {
+    public static Map<Vertex, List<Vertex>> shortestPath(Vertex from, Collection<Vertex> to, boolean reverseSearch) throws InvalidShortestPathArguments {
         Map<Vertex, Integer> vertexDistances = new HashMap<>();
         Map<Vertex, Vertex> vertexPathPrevious = new HashMap<>();
 
@@ -43,10 +62,9 @@ public class ShortestPath {
         pending.add(from);
         vertexDistances.put(from, 0);
 
-        for (Vertex toVertex : to) {
-            if (!pending.contains(toVertex)) {
-                throw new IllegalArgumentException("Attempted to determine path for vertex that is not in the search space!" + toVertex);
-            }
+        Collection<Vertex> invalidVertices = to.stream().filter(v -> !pending.contains(v)).collect(Collectors.toList());
+        if (!invalidVertices.isEmpty()) {
+            throw new InvalidShortestPathArguments(invalidVertices);
         }
 
         while (!pending.isEmpty()) {
