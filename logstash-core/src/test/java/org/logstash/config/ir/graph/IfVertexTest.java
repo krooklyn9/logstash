@@ -3,8 +3,6 @@ package org.logstash.config.ir.graph;
 import org.junit.Test;
 import org.logstash.config.ir.InvalidIRException;
 
-import java.util.Collections;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.logstash.config.ir.IRHelpers.*;
@@ -22,7 +20,7 @@ public class IfVertexTest {
     public void testDoesNotAcceptNonBooleanEdges() throws InvalidIRException {
         Graph graph = Graph.empty();
         IfVertex ifV = testIfVertex();
-        Vertex otherV = testVertex();
+        Vertex otherV = createTestVertex();
         graph.threadVertices(PlainEdge.factory, ifV, otherV);
     }
 
@@ -31,7 +29,7 @@ public class IfVertexTest {
         Graph graph = Graph.empty();
         IfVertex ifV = testIfVertex();
         graph.addVertex(ifV);
-        Vertex trueV = testVertex();
+        Vertex trueV = createTestVertex();
         graph.addVertex(trueV);
 
         assertThat(ifV.hasEdgeType(true), is(false));
@@ -48,7 +46,7 @@ public class IfVertexTest {
                 is(BooleanEdge.falseFactory)
         );
 
-        Vertex falseV = testVertex();
+        Vertex falseV = createTestVertex();
         graph.threadVertices(BooleanEdge.falseFactory, ifV, falseV);
 
         assertThat(ifV.hasEdgeType(false), is(true));
@@ -62,7 +60,7 @@ public class IfVertexTest {
     }
 
     public IfVertex testIfVertex() throws InvalidIRException {
-        return new IfVertex(testMetadata(), testExpression());
+        return new IfVertex(testMetadata(), createTestExpression());
     }
 
 }

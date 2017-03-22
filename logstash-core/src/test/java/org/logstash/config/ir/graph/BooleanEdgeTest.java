@@ -22,14 +22,14 @@ public class BooleanEdgeTest {
 
     @Theory
     public void testBasicBooleanEdgeProperties(Boolean edgeType) throws InvalidIRException {
-        BooleanEdge be = new BooleanEdge(edgeType, testVertex(), testVertex());
+        BooleanEdge be = new BooleanEdge(edgeType, createTestVertex(), createTestVertex());
         assertThat(be.getEdgeType(), is(edgeType));
     }
 
     @Theory
     public void testFactoryCreation(Boolean edgeType) throws InvalidIRException {
         BooleanEdge.BooleanEdgeFactory factory = new BooleanEdge.BooleanEdgeFactory(edgeType);
-        BooleanEdge be = factory.make(testVertex(), testVertex());
+        BooleanEdge be = factory.make(createTestVertex(), createTestVertex());
         assertThat(be.getEdgeType(), is(edgeType));
     }
 }

@@ -2,13 +2,12 @@ package org.logstash.config.ir.imperative;
 
 import org.junit.Test;
 import org.logstash.config.ir.InvalidIRException;
-import org.logstash.config.ir.Pipeline;
 import org.logstash.config.ir.graph.Graph;
 import org.logstash.config.ir.graph.IfVertex;
 import org.logstash.config.ir.graph.PluginVertex;
 
 import static org.logstash.config.ir.DSL.*;
-import static org.logstash.config.ir.IRHelpers.assertGraphEquals;
+import static org.logstash.config.ir.IRHelpers.assertSyntaxEquals;
 import static org.logstash.config.ir.PluginDefinition.Type.*;
 
 /**
@@ -24,7 +23,7 @@ public class ImperativeToGraphtest {
         Graph regular = Graph.empty();
         regular.threadVertices(gPlugin(FILTER, "json"), gPlugin(FILTER, "stuff"));
 
-        assertGraphEquals(imperative, regular);
+        assertSyntaxEquals(imperative, regular);
     }
 
     @Test
@@ -35,7 +34,7 @@ public class ImperativeToGraphtest {
         Graph regular = Graph.empty();
         regular.threadVertices(gPlugin(FILTER, "json", "someotherid"), gPlugin(FILTER, "stuff", "graphid"));
 
-        assertGraphEquals(imperative, regular);
+        assertSyntaxEquals(imperative, regular);
     }
 
     @Test
@@ -63,7 +62,7 @@ public class ImperativeToGraphtest {
         expected.threadVertices(false, testIf, p4);
         expected.threadVertices(p4, p5);
 
-        assertGraphEquals(expected, imperative);
+        assertSyntaxEquals(expected, imperative);
     }
 
     // This test has an imperative grammar with nested ifs and dangling
@@ -110,7 +109,7 @@ public class ImperativeToGraphtest {
         expected.threadVertices(p3, pLast);
         expected.threadVertices(p4,pLast);
 
-        assertGraphEquals(imperative, expected);
+        assertSyntaxEquals(imperative, expected);
     }
 
     // This is a good test for what the filter block will do, where there
@@ -161,7 +160,7 @@ public class ImperativeToGraphtest {
         expected.threadVertices(p4, p5);
         expected.threadVertices(p5, terminal);
 
-        assertGraphEquals(imperative, expected);
+        assertSyntaxEquals(imperative, expected);
 
     }
 }

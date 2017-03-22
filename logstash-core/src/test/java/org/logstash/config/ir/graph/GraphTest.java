@@ -5,19 +5,15 @@ import org.logstash.config.ir.DSL;
 import org.logstash.config.ir.IRHelpers;
 import org.logstash.config.ir.InvalidIRException;
 import org.logstash.config.ir.PluginDefinition;
-import org.logstash.config.ir.graph.algorithms.GraphDiff;
 import org.logstash.config.ir.imperative.IfStatement;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.logstash.config.ir.IRHelpers.testExpression;
+import static org.logstash.config.ir.IRHelpers.createTestExpression;
 import static org.logstash.config.ir.IRHelpers.testVertex;
 
 /**
@@ -27,8 +23,8 @@ public class GraphTest {
     @Test
     public void testGraphBasics() throws InvalidIRException {
         Graph g = Graph.empty();
-        Vertex v1 = testVertex();
-        Vertex v2 = testVertex();
+        Vertex v1 = IRHelpers.createTestVertex();
+        Vertex v2 = IRHelpers.createTestVertex();
         g.threadVertices(v1, v2);
         Edge e = v1.outgoingEdges().findFirst().get();
         assertEquals("Connects vertex edges correctly", v1.getOutgoingEdges(), v2.getIncomingEdges());
@@ -41,8 +37,8 @@ public class GraphTest {
     @Test(expected = org.logstash.config.ir.InvalidIRException.class)
     public void testGraphCycleDetection() throws InvalidIRException {
         Graph g = Graph.empty();
-        Vertex v1 = testVertex();
-        Vertex v2 = testVertex();
+        Vertex v1 = IRHelpers.createTestVertex();
+        Vertex v2 = IRHelpers.createTestVertex();
         g.threadVertices(v1, v2);
         g.threadVertices(v2, v1);
     }
@@ -50,10 +46,10 @@ public class GraphTest {
     @Test
     public void chaining() throws InvalidIRException {
         Graph fromGraph = Graph.empty();
-        fromGraph.threadVertices(testVertex("fromV1"), testVertex("fromV2"));
+        fromGraph.threadVertices(createTestVertex("fromV1"), createTestVertex("fromV2"));
 
         Graph toGraph = Graph.empty();
-        toGraph.threadVertices(testVertex("toV1"), testVertex("toV2"));
+        toGraph.threadVertices(createTestVertex("toV1"), createTestVertex("toV2"));
 
         Graph result = fromGraph.chain(toGraph);
         assertEquals(3, result.getEdges().size());
@@ -63,11 +59,11 @@ public class GraphTest {
     @Test
     public void chainingIntoMultipleRoots() throws InvalidIRException {
         Graph fromGraph = Graph.empty();
-        fromGraph.threadVertices(testVertex("fromV1"), testVertex("fromV2"));
+        fromGraph.threadVertices(createTestVertex("fromV1"), createTestVertex("fromV2"));
 
         Graph toGraph = Graph.empty();
-        toGraph.threadVertices(testVertex("toV1"), testVertex("toV2"));
-        toGraph.addVertex(testVertex("toV3"));
+        toGraph.threadVertices(createTestVertex("toV1"), createTestVertex("toV2"));
+        toGraph.addVertex(createTestVertex("toV3"));
 
         Graph result = fromGraph.chain(toGraph);
         assertEquals(4, result.getEdges().size());
@@ -78,9 +74,9 @@ public class GraphTest {
     @Test
     public void SimpleConsistencyTest() throws InvalidIRException {
         Graph g1 = Graph.empty();
-        g1.addVertex(testVertex("a"));
+        g1.addVertex(createTestVertex("a"));
         Graph g2 = Graph.empty();
-        g2.addVertex(testVertex("a"));
+        g2.addVertex(createTestVertex("a"));
 
         assertEquals(g1.uniqueHash(), g2.uniqueHash());
     }
@@ -96,8 +92,8 @@ public class GraphTest {
     @Test
     public void testThreading() throws InvalidIRException {
         Graph graph = Graph.empty();
-        Vertex v1 = testVertex();
-        Vertex v2 = testVertex();
+        Vertex v1 = IRHelpers.createTestVertex();
+        Vertex v2 = IRHelpers.createTestVertex();
         graph.threadVertices(v1, v2);
         assertVerticesConnected(v1, v2);
         Edge v1Edge = v1.outgoingEdges().findFirst().get();
@@ -109,9 +105,9 @@ public class GraphTest {
     @Test
     public void testThreadingMulti() throws InvalidIRException {
         Graph graph = Graph.empty();
-        Vertex v1 = testVertex();
-        Vertex v2 = testVertex();
-        Vertex v3 = testVertex();
+        Vertex v1 = IRHelpers.createTestVertex();
+        Vertex v2 = IRHelpers.createTestVertex();
+        Vertex v3 = IRHelpers.createTestVertex();
         Collection<Edge> multiEdges = graph.threadVertices(v1, v2, v3);
 
         assertThat(v1.getOutgoingVertices(), is(Collections.singletonList(v2)));
@@ -123,8 +119,8 @@ public class GraphTest {
     @Test
     public void testThreadingTyped() throws InvalidIRException {
         Graph graph = Graph.empty();
-        Vertex if1 = new IfVertex(null, testExpression());
-        Vertex condT = testVertex();
+        Vertex if1 = new IfVertex(null, createTestExpression());
+        Vertex condT = IRHelpers.createTestVertex();
         Edge tEdge = graph.threadVertices(BooleanEdge.trueFactory, if1, condT).stream().findFirst().get();
         assertThat(tEdge, instanceOf(BooleanEdge.class));
         BooleanEdge tBooleanEdge = (BooleanEdge) tEdge;
@@ -134,7 +130,7 @@ public class GraphTest {
     @Test
     public void copyTest() throws InvalidIRException {
         Graph left = Graph.empty();
-        left.addVertex(testVertex("t1"));
+        left.addVertex(createTestVertex("t1"));
         Graph right = left.copy();
 
         Vertex lv = left.getVertexById("t1");

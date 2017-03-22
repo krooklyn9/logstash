@@ -2,15 +2,15 @@
 require 'logstash/errors'
 require "treetop"
 require "logstash/compiler/treetop_monkeypatches"
-java_import Java::OrgLogstashConfigIr::DSL
-java_import Java::OrgLogstashConfigIr::SourceMetadata
+java_import org.logstash.config.ir.DSL
+java_import org.logstash.config.ir.SourceMetadata
 
 module LogStashCompilerLSCLGrammar; module LogStash; module Compiler; module LSCL; module AST
   # Helpers for parsing LSCL files
   module Helpers
     def source_meta
       line, column = line_and_column
-      Java::OrgLogstashConfigIr::SourceMetadata.new(source_file, line, column, self.text_value)
+      org.logstash.config.ir.SourceMetadata.new(source_file, line, column, self.text_value)
     end
 
     def source_file=(value)
@@ -39,15 +39,15 @@ module LogStashCompilerLSCLGrammar; module LogStash; module Compiler; module LSC
     end
 
     def empty_source_meta()
-      Java::OrgLogstashConfigIr::SourceMetadata.new()
+      org.logstash.config.ir.SourceMetadata.new()
     end
 
     def jdsl
-      Java::OrgLogstashConfigIr::DSL
+      org.logstash.config.ir.DSL
     end
 
     def self.jdsl
-      Java::OrgLogstashConfigIr::DSL
+      org.logstash.config.ir.DSL
     end
     
     AND_METHOD = jdsl.method(:eAnd)
@@ -104,7 +104,7 @@ module LogStashCompilerLSCLGrammar; module LogStash; module Compiler; module LSC
   
   class PluginSection < Node
     def expr
-      [*recursive_select(Branch, Plugin).map(&:expr)]
+      recursive_select(Branch, Plugin).map(&:expr)
     end
   end
 

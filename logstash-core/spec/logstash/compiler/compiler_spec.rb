@@ -20,9 +20,7 @@ describe LogStash::Compiler do
     describe "complex configs" do
       shared_examples_for "compilable LSCL files" do |path|
         describe "parsing #{path}" do
-          let(:source) {
-            File.open(path) {|f| f.read }
-          }
+          let(:source) { File.read(path) }
           
           it "should compile" do
             expect(compiled).to be_java_kind_of(Java::OrgLogstashConfigIr::Pipeline)
@@ -41,7 +39,7 @@ describe LogStash::Compiler do
   end
 
   describe "compiling imperative" do
-    subject(:source_file) { "fake_sourcefile" }
+    let(:source_file) { "fake_sourcefile" }
     subject(:compiled) { described_class.compile_imperative(source, source_file) }
 
     describe "an empty file" do
@@ -82,13 +80,18 @@ describe LogStash::Compiler do
 
       describe "a plugin with mixed parameter types" do
         let(:plugin_source) { "generator { aarg => [1] hasharg => {foo => bar} iarg => 123 farg => 123.123 sarg => 'hello'}" }
+        let(:expected_plugin_args) do
+          { 
+            "aarg" => [1],
+            "hasharg" => {"foo" => "bar"},
+            "iarg" => 123,
+            "farg" => 123.123,
+            "sarg" => 'hello'
+          }
+        end
 
         it "should contain the plugin" do
-          expect(c_plugin).to ir_eql(j.iPlugin(INPUT, "generator", {"aarg" => [1],
-                                                                "hasharg" => {"foo" => "bar"},
-                                                                "iarg" => 123,
-                                                                "farg" => 123.123,
-                                                                "sarg" => 'hello'}))
+          expect(c_plugin).to ir_eql(j.iPlugin(INPUT, "generator", expected_plugin_args))
         end
       end
     end
@@ -131,7 +134,7 @@ describe LogStash::Compiler do
       }
 
       let(:section) { section }
-      let (:c_section) { compiled[section] }
+      let (:compiled_section) { compiled[section] }
 
       def splugin(*args)
         j.iPlugin(section_name_enum, *args)
@@ -160,7 +163,7 @@ describe LogStash::Compiler do
         
         
         it "should contain both section declarations, in order" do
-          expect(c_section).to ir_eql(compose(
+          expect(compiled_section).to ir_eql(compose(
                                       splugin("aplugin", {"count" => 1}),
                                         splugin("aplugin", {"count" => 2})
                                       ))
@@ -179,27 +182,27 @@ describe LogStash::Compiler do
         end
 
         it "should contain both" do
-          expect(c_section).to ir_eql(compose(
+          expect(compiled_section).to ir_eql(compose(
                                         splugin("aplugin", {"count" => 1}),
                                         splugin("aplugin", {"count" => 2})
                                       ))
         end
 
         it "should attach source_metadata with correct info to the statements" do
-          meta = c_section.statements.first.meta
+          meta = compiled_section.statements.first.meta
           expect(meta.getSourceText).to eql("aplugin { count => 1 }")
           expect(meta.getSourceLine).to eql(2)
           expect(meta.getSourceColumn).to eql(13)
           expect(meta.getSourceFile).to eql(source_file)
-          expect(c_section.statements.first.meta)
-          expect(c_section)
+          expect(compiled_section.statements.first.meta)
+          expect(compiled_section)
         end
       end
 
       describe "if conditions" do
         describe "conditional expressions" do
           let(:source) { "#{section} { if (#{expression}) { aplugin {} } }" }
-          let(:c_expression) { c_section.getBooleanExpression }
+          let(:c_expression) { compiled_section.getBooleanExpression }
 
           describe "logical expressions" do
             describe "simple and" do
@@ -417,7 +420,7 @@ describe LogStash::Compiler do
           let (:source) { "#{section} { if [foo] == [bar] { grok {} } }" }
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                             j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                             splugin("grok")
                                           )
@@ -429,7 +432,7 @@ describe LogStash::Compiler do
           let (:source) { "#{section} { if [foo] == [bar] { } else { fplugin {} } }" }
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                           j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                           j.noop,
                                           splugin("fplugin"),
@@ -442,7 +445,7 @@ describe LogStash::Compiler do
           let (:source) { "#{section} { if [foo] == [bar] { } }" }
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                           j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                           j.noop,
                                           j.noop
@@ -455,7 +458,7 @@ describe LogStash::Compiler do
           let (:source) { "#{section} { if [foo] == [bar] { tplugin {} } else { fplugin {} } }" }
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                           j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                           splugin("tplugin"),
                                           splugin("fplugin")
@@ -468,7 +471,7 @@ describe LogStash::Compiler do
           let (:source) { "#{section} { if [foo] == [bar] { tplugin {} } else if [bar] == [baz] { eifplugin {} } else { fplugin {} } }" }
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                           j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                           splugin("tplugin"),
                                           j.iIf(
@@ -494,7 +497,7 @@ describe LogStash::Compiler do
           end
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                           j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                           splugin("tplugin"),
                                           j.iIf(
@@ -526,7 +529,7 @@ describe LogStash::Compiler do
           end
 
           it "should compile correctly" do
-            expect(c_section).to ir_eql(j.iIf(
+            expect(compiled_section).to ir_eql(j.iIf(
                                           j.eEq(j.eEventValue("[foo]"), j.eEventValue("[bar]")),
                                           j.iIf(j.eEq(j.eEventValue("[bar]"), j.eEventValue("[baz]")),
                                                    splugin("aplugin"),

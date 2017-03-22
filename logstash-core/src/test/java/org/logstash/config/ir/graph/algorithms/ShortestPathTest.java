@@ -19,13 +19,13 @@ public class ShortestPathTest {
     @Test
     public void testShortestPathBasic() throws InvalidIRException, ShortestPath.InvalidShortestPathArguments {
         Graph g = Graph.empty();
-        Vertex v1 = testVertex("v1");
+        Vertex v1 = createTestVertex("v1");
         g.addVertex(v1);
-        Vertex v2 = testVertex("v2");
+        Vertex v2 = createTestVertex("v2");
         g.addVertex(v2);
-        Vertex v3 = testVertex("v3");
+        Vertex v3 = createTestVertex("v3");
         g.addVertex(v3);
-        Vertex v4 = testVertex("v4");
+        Vertex v4 = createTestVertex("v4");
         g.addVertex(v4);
 
         g.threadVertices(v1, v2, v3, v4);

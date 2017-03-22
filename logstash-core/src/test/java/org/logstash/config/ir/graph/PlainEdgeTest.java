@@ -1,9 +1,7 @@
 package org.logstash.config.ir.graph;
 
 import org.junit.Test;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.logstash.config.ir.IRHelpers;
 import org.logstash.config.ir.InvalidIRException;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -16,12 +14,12 @@ import static org.logstash.config.ir.IRHelpers.testVertex;
 public class PlainEdgeTest {
     @Test
     public void creationDoesNotRaiseException() throws InvalidIRException {
-        new PlainEdge(testVertex(), testVertex());
+        new PlainEdge(IRHelpers.createTestVertex(), IRHelpers.createTestVertex());
     }
 
     @Test
     public void testFactoryCreationDoesNotRaiseException() throws InvalidIRException {
         PlainEdge.PlainEdgeFactory factory = new PlainEdge.PlainEdgeFactory();
-        factory.make(testVertex(), testVertex());
+        factory.make(IRHelpers.createTestVertex(), IRHelpers.createTestVertex());
     }
 }

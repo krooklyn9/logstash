@@ -6,8 +6,6 @@ import org.logstash.config.ir.graph.Edge;
 import org.logstash.config.ir.graph.Graph;
 import org.logstash.config.ir.graph.Vertex;
 
-import java.util.Collections;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -37,7 +35,7 @@ public class GraphDiffTest {
         Graph left = simpleGraph();
 
         Graph right = left.copy();
-        Vertex new1 = testVertex("new1");
+        Vertex new1 = createTestVertex("new1");
         right.addVertex(new1);
         right.threadVerticesById("t3", "new1");
 
@@ -58,9 +56,9 @@ public class GraphDiffTest {
 
     public Graph simpleGraph() throws InvalidIRException {
         Graph graph = Graph.empty();
-        graph.addVertex(testVertex("t1"));
-        graph.addVertex(testVertex("t2"));
-        graph.addVertex(testVertex("t3"));
+        graph.addVertex(createTestVertex("t1"));
+        graph.addVertex(createTestVertex("t2"));
+        graph.addVertex(createTestVertex("t3"));
         graph.threadVerticesById("t1", "t2", "t3");
         graph.threadVerticesById("t1", "t3");
         return graph;

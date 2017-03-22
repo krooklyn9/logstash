@@ -25,16 +25,16 @@ public class IRHelpers {
         MatcherAssert.assertThat(message, left.sourceComponentEquals(right));
     }
 
-    public static void assertGraphEquals(Graph left, Graph right) {
+    public static void assertSyntaxEquals(Graph left, Graph right) {
         String message = String.format("Expected \n'%s'\n to equal \n'%s'\n%s", left, right, GraphDiff.diff(left, right));
         MatcherAssert.assertThat(message, left.sourceComponentEquals(right));
     }
 
-    public static Vertex testVertex() {
-        return testVertex(UUID.randomUUID().toString());
+    public static Vertex createTestVertex() {
+        return createTestVertex(UUID.randomUUID().toString());
     }
 
-    public static Vertex testVertex(String id) {
+    public static Vertex createTestVertex(String id) {
         return new TestVertex(id);
     }
 
@@ -79,14 +79,14 @@ public class IRHelpers {
         }
     }
 
-    public static Edge testEdge() throws InvalidIRException {
-        Vertex v1 = testVertex();
-        Vertex v2 = testVertex();
+    public static Edge createTestEdge() throws InvalidIRException {
+        Vertex v1 = createTestVertex();
+        Vertex v2 = createTestVertex();
         return new TestEdge(v1,v2);
 
     }
 
-    public static Edge testEdge(Vertex from, Vertex to) throws InvalidIRException {
+    public static Edge createTestEdge(Vertex from, Vertex to) throws InvalidIRException {
         return new TestEdge(from, to);
     }
 
@@ -111,7 +111,7 @@ public class IRHelpers {
         }
     }
 
-    public static BooleanExpression testExpression() throws InvalidIRException {
+    public static BooleanExpression createTestExpression() throws InvalidIRException {
         return new Truthy(null, new ValueExpression(null, 1));
     }
 
