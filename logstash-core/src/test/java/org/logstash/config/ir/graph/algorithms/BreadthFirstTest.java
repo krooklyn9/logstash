@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.logstash.config.ir.IRHelpers.testVertex;
 
 /**
  * Created by andrewvc on 1/5/17.
@@ -19,7 +18,7 @@ public class BreadthFirstTest {
     @Test
     public void testBFSBasic() throws InvalidIRException {
         Graph g = Graph.empty();
-        g.threadVertices(IRHelpers.createTestVertex(), IRHelpers.createTestVertex(), IRHelpers.createTestVertex());
+        g.chainVertices(IRHelpers.createTestVertex(), IRHelpers.createTestVertex(), IRHelpers.createTestVertex());
 
         // We don't *really* need threadsafety for the count,
         // but since we're using a lambda we need something that's final

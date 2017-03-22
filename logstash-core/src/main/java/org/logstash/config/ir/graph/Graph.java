@@ -78,7 +78,7 @@ public class Graph implements SourceComponent, Hashable {
         return this.vertices().filter(v -> v.getId().equals(id)).findAny().get();
     }
 
-    // Use threadVertices instead
+    // Use chainVertices instead
     private Graph addEdge(Edge e) throws InvalidIRException {
         return addEdge(e, true);
     }
@@ -175,7 +175,7 @@ public class Graph implements SourceComponent, Hashable {
         for (Vertex leaf : fromLeaves) {
             for (Edge.EdgeFactory unusedEf : leaf.getUnusedOutgoingEdgeFactories()) {
                 for (Vertex toVertex : toVertices) {
-                    this.threadVertices(unusedEf, leaf, toVertex);
+                    this.chainVertices(unusedEf, leaf, toVertex);
                 }
             }
         }
@@ -183,25 +183,25 @@ public class Graph implements SourceComponent, Hashable {
         return this;
     }
 
-    public Collection<Edge> threadVerticesById(String... vertexIds) throws InvalidIRException {
-        return threadVerticesById(PlainEdge.factory, vertexIds);
+    public Collection<Edge> chainVerticesById(String... vertexIds) throws InvalidIRException {
+        return chainVerticesById(PlainEdge.factory, vertexIds);
     }
 
-    public Collection<Edge> threadVerticesById(Edge.EdgeFactory edgeFactory, String... vertexIds) throws InvalidIRException {
+    public Collection<Edge> chainVerticesById(Edge.EdgeFactory edgeFactory, String... vertexIds) throws InvalidIRException {
         Vertex[] argVertices = new Vertex[vertexIds.length];
         for (int i = 0; i < vertexIds.length; i ++) {
             String id = vertexIds[i];
             Vertex v = getVertexById(id);
-            if (v==null) throw new InvalidIRException("Could not thread vertex, id not found in graph: !" + id + "\n" + this);
+            if (v==null) throw new InvalidIRException("Could not chain vertex, id not found in graph: !" + id + "\n" + this);
             argVertices[i] = v;
         }
-        return threadVertices(edgeFactory, argVertices);
+        return chainVertices(edgeFactory, argVertices);
     }
 
     // Will not validate the graph after running!
     // You must invoke validate the graph yourself
     // after invoking
-    public Collection<Edge> threadVerticesUnsafe(Edge.EdgeFactory edgeFactory, Vertex... argVertices) throws InvalidIRException {
+    public Collection<Edge> chainVerticesUnsafe(Edge.EdgeFactory edgeFactory, Vertex... argVertices) throws InvalidIRException {
         List<Vertex> importedVertices = new ArrayList<>(argVertices.length);
         for (Vertex va : argVertices) {
             importedVertices.add(this.importVertex(va));
@@ -225,23 +225,23 @@ public class Graph implements SourceComponent, Hashable {
         return newEdges;
     }
 
-    public Collection<Edge> threadVertices(Edge.EdgeFactory edgeFactory, Vertex... argVertices) throws InvalidIRException {
-        Collection<Edge> edges = threadVerticesUnsafe(edgeFactory, argVertices);
+    public Collection<Edge> chainVertices(Edge.EdgeFactory edgeFactory, Vertex... argVertices) throws InvalidIRException {
+        Collection<Edge> edges = chainVerticesUnsafe(edgeFactory, argVertices);
         validate();
         return edges;
     }
 
-    public Edge threadVertices(Vertex a, Vertex b) throws InvalidIRException {
-        return threadVertices(PlainEdge.factory, a, b).stream().findFirst().get();
+    public Edge chainVertices(Vertex a, Vertex b) throws InvalidIRException {
+        return chainVertices(PlainEdge.factory, a, b).stream().findFirst().get();
     }
 
-    public Collection<Edge> threadVertices(Vertex... vertices) throws InvalidIRException {
-        return threadVertices(PlainEdge.factory, vertices);
+    public Collection<Edge> chainVertices(Vertex... vertices) throws InvalidIRException {
+        return chainVertices(PlainEdge.factory, vertices);
     }
 
-    public Collection<Edge> threadVertices(boolean bool, Vertex... vertices) throws InvalidIRException {
+    public Collection<Edge> chainVertices(boolean bool, Vertex... vertices) throws InvalidIRException {
         Edge.EdgeFactory factory = bool ? BooleanEdge.trueFactory : BooleanEdge.falseFactory;
-        return threadVertices(factory, vertices);
+        return chainVertices(factory, vertices);
     }
 
     // Many of the operations we perform involve modifying one graph by adding vertices/edges

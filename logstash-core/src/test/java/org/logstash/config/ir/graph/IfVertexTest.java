@@ -21,7 +21,7 @@ public class IfVertexTest {
         Graph graph = Graph.empty();
         IfVertex ifV = testIfVertex();
         Vertex otherV = createTestVertex();
-        graph.threadVertices(PlainEdge.factory, ifV, otherV);
+        graph.chainVertices(PlainEdge.factory, ifV, otherV);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class IfVertexTest {
         assertThat(ifV.hasEdgeType(false), is(false));
         assertThat(ifV.getUnusedOutgoingEdgeFactories().size(), is(2));
 
-        graph.threadVertices(BooleanEdge.trueFactory, ifV, trueV);
+        graph.chainVertices(BooleanEdge.trueFactory, ifV, trueV);
 
         assertThat(ifV.hasEdgeType(true), is(true));
         assertThat(ifV.hasEdgeType(false), is(false));
@@ -47,7 +47,7 @@ public class IfVertexTest {
         );
 
         Vertex falseV = createTestVertex();
-        graph.threadVertices(BooleanEdge.falseFactory, ifV, falseV);
+        graph.chainVertices(BooleanEdge.falseFactory, ifV, falseV);
 
         assertThat(ifV.hasEdgeType(false), is(true));
         assertThat(ifV.getUnusedOutgoingEdgeFactories().isEmpty(), is(true));

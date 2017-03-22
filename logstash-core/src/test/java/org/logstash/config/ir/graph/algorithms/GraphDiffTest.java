@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.logstash.config.ir.IRHelpers.testVertex;
+import static org.logstash.config.ir.IRHelpers.createTestVertex;
 
 /**
  * Created by andrewvc on 1/5/17.
@@ -37,7 +37,7 @@ public class GraphDiffTest {
         Graph right = left.copy();
         Vertex new1 = createTestVertex("new1");
         right.addVertex(new1);
-        right.threadVerticesById("t3", "new1");
+        right.chainVerticesById("t3", "new1");
 
         GraphDiff.DiffResult result = GraphDiff.diff(left, right);
 
@@ -59,8 +59,8 @@ public class GraphDiffTest {
         graph.addVertex(createTestVertex("t1"));
         graph.addVertex(createTestVertex("t2"));
         graph.addVertex(createTestVertex("t3"));
-        graph.threadVerticesById("t1", "t2", "t3");
-        graph.threadVerticesById("t1", "t3");
+        graph.chainVerticesById("t1", "t2", "t3");
+        graph.chainVerticesById("t1", "t3");
         return graph;
     }
 }

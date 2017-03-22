@@ -53,11 +53,9 @@ end
 
 RSpec::Matchers.define :ir_eql do |expected|
   match do |actual|
-    if expected.java_kind_of?(org.logstash.config.ir.SourceComponent) && actual.java_kind_of?(org.logstash.config.ir.SourceComponent)
-      expected.sourceComponentEquals(actual)
-    else
-      return false
-    end    
+    next unless expected.java_kind_of?(org.logstash.config.ir.SourceComponent) && actual.java_kind_of?(org.logstash.config.ir.SourceComponent)
+    
+    expected.sourceComponentEquals(actual)
   end
   
   failure_message do |actual|

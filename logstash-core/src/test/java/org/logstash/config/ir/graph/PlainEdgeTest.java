@@ -4,10 +4,6 @@ import org.junit.Test;
 import org.logstash.config.ir.IRHelpers;
 import org.logstash.config.ir.InvalidIRException;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.logstash.config.ir.IRHelpers.testVertex;
-
 /**
  * Created by andrewvc on 11/22/16.
  */

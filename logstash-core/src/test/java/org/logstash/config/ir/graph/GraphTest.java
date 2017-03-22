@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.logstash.config.ir.IRHelpers.createTestExpression;
-import static org.logstash.config.ir.IRHelpers.testVertex;
+import static org.logstash.config.ir.IRHelpers.createTestVertex;
 
 /**
  * Created by andrewvc on 11/18/16.
@@ -25,7 +25,7 @@ public class GraphTest {
         Graph g = Graph.empty();
         Vertex v1 = IRHelpers.createTestVertex();
         Vertex v2 = IRHelpers.createTestVertex();
-        g.threadVertices(v1, v2);
+        g.chainVertices(v1, v2);
         Edge e = v1.outgoingEdges().findFirst().get();
         assertEquals("Connects vertex edges correctly", v1.getOutgoingEdges(), v2.getIncomingEdges());
         assertEquals("Has one edge", g.getEdges(), Collections.singleton(e));
@@ -39,17 +39,17 @@ public class GraphTest {
         Graph g = Graph.empty();
         Vertex v1 = IRHelpers.createTestVertex();
         Vertex v2 = IRHelpers.createTestVertex();
-        g.threadVertices(v1, v2);
-        g.threadVertices(v2, v1);
+        g.chainVertices(v1, v2);
+        g.chainVertices(v2, v1);
     }
 
     @Test
     public void chaining() throws InvalidIRException {
         Graph fromGraph = Graph.empty();
-        fromGraph.threadVertices(createTestVertex("fromV1"), createTestVertex("fromV2"));
+        fromGraph.chainVertices(createTestVertex("fromV1"), createTestVertex("fromV2"));
 
         Graph toGraph = Graph.empty();
-        toGraph.threadVertices(createTestVertex("toV1"), createTestVertex("toV2"));
+        toGraph.chainVertices(createTestVertex("toV1"), createTestVertex("toV2"));
 
         Graph result = fromGraph.chain(toGraph);
         assertEquals(3, result.getEdges().size());
@@ -59,10 +59,10 @@ public class GraphTest {
     @Test
     public void chainingIntoMultipleRoots() throws InvalidIRException {
         Graph fromGraph = Graph.empty();
-        fromGraph.threadVertices(createTestVertex("fromV1"), createTestVertex("fromV2"));
+        fromGraph.chainVertices(createTestVertex("fromV1"), createTestVertex("fromV2"));
 
         Graph toGraph = Graph.empty();
-        toGraph.threadVertices(createTestVertex("toV1"), createTestVertex("toV2"));
+        toGraph.chainVertices(createTestVertex("toV1"), createTestVertex("toV2"));
         toGraph.addVertex(createTestVertex("toV3"));
 
         Graph result = fromGraph.chain(toGraph);
@@ -94,7 +94,7 @@ public class GraphTest {
         Graph graph = Graph.empty();
         Vertex v1 = IRHelpers.createTestVertex();
         Vertex v2 = IRHelpers.createTestVertex();
-        graph.threadVertices(v1, v2);
+        graph.chainVertices(v1, v2);
         assertVerticesConnected(v1, v2);
         Edge v1Edge = v1.outgoingEdges().findFirst().get();
         Edge v2Edge = v2.incomingEdges().findFirst().get();
@@ -108,7 +108,7 @@ public class GraphTest {
         Vertex v1 = IRHelpers.createTestVertex();
         Vertex v2 = IRHelpers.createTestVertex();
         Vertex v3 = IRHelpers.createTestVertex();
-        Collection<Edge> multiEdges = graph.threadVertices(v1, v2, v3);
+        Collection<Edge> multiEdges = graph.chainVertices(v1, v2, v3);
 
         assertThat(v1.getOutgoingVertices(), is(Collections.singletonList(v2)));
         assertThat(v2.getIncomingVertices(), is(Collections.singletonList(v1)));
@@ -121,7 +121,7 @@ public class GraphTest {
         Graph graph = Graph.empty();
         Vertex if1 = new IfVertex(null, createTestExpression());
         Vertex condT = IRHelpers.createTestVertex();
-        Edge tEdge = graph.threadVertices(BooleanEdge.trueFactory, if1, condT).stream().findFirst().get();
+        Edge tEdge = graph.chainVertices(BooleanEdge.trueFactory, if1, condT).stream().findFirst().get();
         assertThat(tEdge, instanceOf(BooleanEdge.class));
         BooleanEdge tBooleanEdge = (BooleanEdge) tEdge;
         assertThat(tBooleanEdge.getEdgeType(), is(true));

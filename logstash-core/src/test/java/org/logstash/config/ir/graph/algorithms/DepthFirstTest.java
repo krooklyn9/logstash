@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.logstash.config.ir.IRHelpers.testVertex;
 
 /**
  * Created by andrewvc on 1/5/17.
@@ -20,7 +19,7 @@ public class DepthFirstTest {
     @Test
     public void testDFSBasic() throws InvalidIRException {
         Graph g = Graph.empty();
-        g.threadVertices(IRHelpers.createTestVertex(), IRHelpers.createTestVertex(), IRHelpers.createTestVertex());
+        g.chainVertices(IRHelpers.createTestVertex(), IRHelpers.createTestVertex(), IRHelpers.createTestVertex());
         final AtomicInteger visitCount = new AtomicInteger();
         final List<Vertex> visited = new ArrayList<>();
         DepthFirst.depthFirst(g).forEach(v -> visitCount.incrementAndGet());

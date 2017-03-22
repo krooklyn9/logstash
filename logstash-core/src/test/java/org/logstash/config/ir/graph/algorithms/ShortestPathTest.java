@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.logstash.config.ir.IRHelpers.testVertex;
+import static org.logstash.config.ir.IRHelpers.createTestVertex;
 
 /**
  * Created by andrewvc on 1/5/17.
@@ -28,8 +28,8 @@ public class ShortestPathTest {
         Vertex v4 = createTestVertex("v4");
         g.addVertex(v4);
 
-        g.threadVertices(v1, v2, v3, v4);
-        g.threadVertices(v2, v4);
+        g.chainVertices(v1, v2, v3, v4);
+        g.chainVertices(v2, v4);
 
         List<Vertex> path = ShortestPath.shortestPath(v1, v4);
         List<Vertex> expected = Arrays.asList(v1,v2,v4);

@@ -5,7 +5,6 @@ import org.logstash.config.ir.IRHelpers;
 import org.logstash.config.ir.InvalidIRException;
 
 import static org.junit.Assert.*;
-import static org.logstash.config.ir.IRHelpers.testVertex;
 
 /**
  * Created by andrewvc on 11/21/16.
@@ -16,7 +15,7 @@ public class VertexTest {
         Graph graph = Graph.empty();
         Vertex v1 = IRHelpers.createTestVertex();
         Vertex v2 = IRHelpers.createTestVertex();
-        graph.threadVertices(v1, v2);
+        graph.chainVertices(v1, v2);
 
         assertTrue("v1 has v2 as an outgoing vertex", v1.outgoingVertices().anyMatch(v2::equals));
         assertTrue("v2 has v1 as an incoming vertex", v2.incomingVertices().anyMatch(v1::equals));
@@ -34,7 +33,7 @@ public class VertexTest {
         assertTrue(v.isRoot());
 
         Vertex otherV = IRHelpers.createTestVertex();
-        graph.threadVertices(v, otherV);
+        graph.chainVertices(v, otherV);
 
         assertFalse(v.isLeaf());
         assertTrue(v.isRoot());
@@ -56,7 +55,7 @@ public class VertexTest {
         Vertex v = IRHelpers.createTestVertex();
         Vertex otherV = IRHelpers.createTestVertex();
         Graph graph = Graph.empty();
-        graph.threadVertices(v, otherV);
+        graph.chainVertices(v, otherV);
 
         assertEquals(v.getUnusedOutgoingEdgeFactories().size(), 0);
         assertFalse(v.isPartialLeaf());

@@ -11,7 +11,6 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.Is.is;
-import static org.logstash.config.ir.IRHelpers.testVertex;
 
 /**
  * Created by andrewvc on 1/7/17.
@@ -23,9 +22,9 @@ public class TopologicalSortTest {
         Vertex v1 = IRHelpers.createTestVertex();
         Vertex v2 = IRHelpers.createTestVertex();
         Vertex v3 = IRHelpers.createTestVertex();
-        g.threadVertices(v1, v2);
-        g.threadVertices(v2, v3);
-        g.threadVertices(v2, v1);
+        g.chainVertices(v1, v2);
+        g.chainVertices(v2, v3);
+        g.chainVertices(v2, v1);
     }
 
     @Test
@@ -35,8 +34,8 @@ public class TopologicalSortTest {
         Vertex v2 = IRHelpers.createTestVertex();
         Vertex v3 = IRHelpers.createTestVertex();
         Vertex v4 = IRHelpers.createTestVertex();
-        g.threadVertices(v3, v1, v2);
-        g.threadVertices(v4, v1, v2);
+        g.chainVertices(v3, v1, v2);
+        g.chainVertices(v4, v1, v2);
         assertThat(TopologicalSort.sortVertices(g),
                 anyOf(
                         is(Arrays.asList(v3,v4,v1,v2)),
