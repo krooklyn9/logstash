@@ -16,7 +16,7 @@ public class Truthy extends UnaryBooleanExpression {
 
     @Override
     public String toRubyString() {
-        return "!!(" + this.getExpression() + ")";
+        return "(" + this.getExpression() + ")";
     }
 
     @Override
